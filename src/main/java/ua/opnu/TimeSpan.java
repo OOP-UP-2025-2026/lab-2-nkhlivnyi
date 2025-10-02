@@ -5,11 +5,13 @@ public class TimeSpan {
     private int minutes;
 
     public TimeSpan(int hours, int minutes) {
-        if (hours < 0 || minutes < 0 || minutes > 59) {
-            throw new IllegalArgumentException("Invalid time values");
+        if (hours < 0 || minutes < 0 || minutes >= 60) {
+            this.hours = 0;
+            this.minutes = 0;
+        } else {
+            this.hours = hours;
+            this.minutes = minutes;
         }
-        this.hours = hours;
-        this.minutes = minutes;
     }
 
     public int getHours() {
@@ -20,17 +22,15 @@ public class TimeSpan {
         return minutes;
     }
 
-    public void add(int hours, int minutes) {
-        if (hours < 0 || minutes < 0 || minutes > 59) {
-            throw new IllegalArgumentException("Invalid time values");
-        }
-        int totalMinutes = this.getTotalMinutes() + hours * 60 + minutes;
-        this.hours = totalMinutes / 60;
-        this.minutes = totalMinutes % 60;
+    public void add(int h, int m) {
+        if (h < 0 || m < 0 || m >= 60) return;
+        minutes += m;
+        hours += h + minutes / 60;
+        minutes %= 60;
     }
 
-    public void addTimeSpan(TimeSpan timespan) {
-        add(timespan.getHours(), timespan.getMinutes());
+    public void addTimeSpan(TimeSpan other) {
+        add(other.hours, other.minutes);
     }
 
     public double getTotalHours() {
@@ -41,21 +41,17 @@ public class TimeSpan {
         return hours * 60 + minutes;
     }
 
-    public void subtract(TimeSpan span) {
-        int totalMinutes = this.getTotalMinutes() - span.getTotalMinutes();
-        if (totalMinutes < 0) {
-            throw new IllegalArgumentException("Resulting timespan cannot be negative");
-        }
-        this.hours = totalMinutes / 60;
-        this.minutes = totalMinutes % 60;
+    public void subtract(TimeSpan other) {
+        int total = getTotalMinutes() - other.getTotalMinutes();
+        if (total < 0) return;
+        hours = total / 60;
+        minutes = total % 60;
     }
 
     public void scale(int factor) {
-        if (factor <= 0) {
-            throw new IllegalArgumentException("Factor must be greater than zero");
-        }
-        int totalMinutes = this.getTotalMinutes() * factor;
-        this.hours = totalMinutes / 60;
-        this.minutes = totalMinutes % 60;
+        if (factor <= 0) return;
+        int total = getTotalMinutes() * factor;
+        hours = total / 60;
+        minutes = total % 60;
     }
 }
