@@ -1,37 +1,42 @@
 package ua.opnu;
 
 public class BankAccount {
-    String name;
-    double balance;
-    double transactionFee = 0.0; // початкове значення
+    public String name;
+    public double balance;
+    public double transactionFee = 0.0;
+
+    public BankAccount() {
+        this.name = "Unknown";
+        this.balance = 0.0;
+    }
 
     public BankAccount(String name, double balance) {
-        this.name = name;
         if (balance < 0) {
             throw new IllegalArgumentException("Balance cannot be negative");
         }
+        this.name = name;
         this.balance = balance;
     }
 
-    void setTransactionFee(double fee) {
+    public void setTransactionFee(double fee) {
         if (fee < 0) {
             throw new IllegalArgumentException("Fee cannot be negative");
         }
         this.transactionFee = fee;
     }
 
-    void deposit(double amount) {
+    public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Deposit must be greater than zero");
         }
         balance += amount;
     }
 
-    double getBalance() {
-        return this.balance;
+    public double getBalance() {
+        return balance;
     }
 
-    boolean withdraw(double amount) {
+    public boolean withdraw(double amount) {
         if (amount <= 0) {
             return false;
         }
@@ -43,7 +48,7 @@ public class BankAccount {
         return false;
     }
 
-    boolean transfer(BankAccount receiver, double amount) {
+    public boolean transfer(BankAccount receiver, double amount) {
         if (receiver == null || amount <= 0) {
             return false;
         }
@@ -56,3 +61,4 @@ public class BankAccount {
         return false;
     }
 }
+
