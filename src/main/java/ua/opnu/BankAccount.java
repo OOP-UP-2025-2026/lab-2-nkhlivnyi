@@ -1,27 +1,28 @@
 package ua.opnu;
 
 public class BankAccount {
-    String name;
-    double balance;
-    double transactionFee;
+    public double balance;
+    public double transactionFee;
 
-    void deposit(double amount) {
-        // TODO: modify method body
-        balance = balance + amount;
+    public void deposit(double amount) {
+        if (amount <= 0) return;
+        balance += amount;
     }
 
-    double getBalance() {
-        return this.balance;
-    }
-
-    boolean withdraw(double amount) {
-        // TODO: modify method body
-        balance = balance - amount;
+    public boolean withdraw(double amount) {
+        if (amount <= 0) return false;
+        double newBalance = balance - amount - transactionFee;
+        if (newBalance < 0) return false;
+        balance = newBalance;
         return true;
     }
 
-    boolean transfer(BankAccount receiver, double amount) {
-        // TODO: modify method body
-        return false;
+    public boolean transfer(BankAccount other, double amount) {
+        if (amount <= 0) return false;
+        if (!withdraw(amount)) return false;
+        other.deposit(amount);
+        return true;
     }
 }
+
+
